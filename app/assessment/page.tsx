@@ -2,26 +2,45 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { assessUser } from '@/app/actions/assessment';
+
+type AssessmentState = 'idle' | 'loading' | 'success' | 'error';
+
+type AssessmentResult = {
+  name: string;
+  completedAt: string;
+  processingTime: string;
+};
 
 export default function AvailabilityPage() {
-  const [result, setResult] = useState<{ success: boolean } | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [state, setState] = useState<AssessmentState>('idle');
+  const [result, setResult] = useState<AssessmentResult | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (formData: FormData) => {
-    setIsSubmitting(true);
+    setState('loading');
+    setError(null);
+    
     try {
-      const response = await fetch('/api/check-availability', {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await response.json();
-      setResult(data);
-    } catch (error) {
-      console.error('Error:', error);
-      setResult({ success: false });
-    } finally {
-      setIsSubmitting(false);
+      const response = await assessUser(formData);
+      
+      if (response.success && response.data) {
+        setResult(response.data);
+        setState('success');
+      } else {
+        setError(response.error || 'Assessment failed');
+        setState('error');
+      }
+    } catch (err) {
+      setError('An unexpected error occurred');
+      setState('error');
     }
+  };
+
+  const resetForm = () => {
+    setState('idle');
+    setResult(null);
+    setError(null);
   };
 
   return (
@@ -44,39 +63,82 @@ export default function AvailabilityPage() {
       
       <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6">
         <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">
-          Check Availability
+          Assessment Tool
         </h1>
-        
-        <form action={handleSubmit} className="space-y-4">
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-              Your Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Enter your name"
-            />
-          </div>
-          
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-green-400 text-white py-2 px-4 rounded-md hover:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
-          >
-            {isSubmitting ? 'Checking...' : 'Submit'}
-          </button>
-        </form>
 
-        {result && (
-          <div className="mt-6 p-4 bg-gray-100 rounded-md">
-            <h2 className="text-lg font-semibold mb-2 text-gray-800">Server Response:</h2>
-            <pre className="text-sm text-gray-700 bg-white p-3 rounded border overflow-auto">
-              {JSON.stringify(result, null, 2)}
-            </pre>
+        {state === 'idle' && (
+          <form onSubmit={(e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target as HTMLFormElement);
+            handleSubmit(formData);
+          }} className="space-y-4">
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                Your Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Enter your name"
+              />
+            </div>
+            
+            <button
+              type="submit"
+              className="w-full bg-green-400 text-white py-2 px-4 rounded-md hover:bg-green-500 transition-colors duration-200"
+            >
+              Start Assessment
+            </button>
+          </form>
+        )}
+
+        {state === 'loading' && (
+          <div className="text-center space-y-4">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="text-lg font-medium text-gray-700">Processing your assessment...</p>
+            <p className="text-sm text-gray-500">This may take a few seconds</p>
+          </div>
+        )}
+
+        {state === 'error' && (
+          <div className="space-y-4">
+            <div className="bg-red-100 border border-red-400 text-red-700 rounded-md p-4">
+              <h3 className="font-semibold mb-2">Assessment Failed</h3>
+              <p>{error}</p>
+            </div>
+            <button
+              onClick={resetForm}
+              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-200"
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+
+        {state === 'success' && result && (
+          <div className="space-y-4">
+            <div className="bg-green-100 border border-green-400 text-green-700 rounded-md p-4">
+              <h3 className="font-semibold mb-3">Assessment Complete! 🎉</h3>
+              <div className="space-y-2">
+                <p><strong>Name:</strong> {result.name}</p>                
+                <p className="text-xs text-green-600 mt-2">
+                  Completed at: {new Date(result.completedAt).toLocaleString()}
+                </p>
+                <p className="text-xs text-green-600">
+                  Processing time: {result.processingTime}
+                </p>
+              </div>
+            </div>
+            
+            <button
+              onClick={resetForm}
+              className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition-colors duration-200"
+            >
+              New Assessment
+            </button>
           </div>
         )}
       </div>
