@@ -2,7 +2,7 @@
   "image": "mcr.microsoft.com/devcontainers/universal:latest",
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
-      "version": "latest" // Or a specific version like "20" or "20.11.0"
+      "version": "20.19.2" // Or a specific version like "20" or "20.11.0"
     }
   }
 }
