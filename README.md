@@ -1,5 +1,3 @@
-# eng-sandbox-base
-
 This is a simple [Next.js](https://nextjs.org) app with an assessment form and server-side action.
 
 ## Getting Started
