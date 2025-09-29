@@ -1,5 +1,7 @@
 "use server";
 
+import { database } from '@/db/database';
+
 // Assessment server action
 export async function assessUser(formData: FormData) {
   try {
@@ -52,7 +54,7 @@ export async function assessUser(formData: FormData) {
     await new Promise(resolve => setTimeout(resolve, 3000));
     
     // Generate assessment results
-    const results = {
+    const assessmentData = {
       name,
       email,
       forestlandAmount: Number(forestlandAmount),
@@ -62,11 +64,14 @@ export async function assessUser(formData: FormData) {
       processingTime: "3 seconds"
     };
     
-    console.log(`Assessment completed for: ${name}`);
+    // Save to database
+    const savedAssessment = await database.addAssessment(assessmentData);
+    
+    console.log(`Assessment completed and saved for: ${name}`);
     
     return { 
       success: true, 
-      data: results 
+      data: savedAssessment 
     };
   } catch (error) {
     console.error('Error assessing:', error);
