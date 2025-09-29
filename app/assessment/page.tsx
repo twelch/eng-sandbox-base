@@ -62,10 +62,6 @@ export default function AvailabilityPage() {
       </Link>
       
       <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6">
-        <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">
-          Assessment Tool
-        </h1>
-
         {state === 'idle' && (
           <form onSubmit={(e) => {
             e.preventDefault();
@@ -90,7 +86,7 @@ export default function AvailabilityPage() {
               type="submit"
               className="w-full bg-green-400 text-white py-2 px-4 rounded-md hover:bg-green-500 transition-colors duration-200"
             >
-              Start Assessment
+              Run Assessment
             </button>
           </form>
         )}
@@ -121,11 +117,11 @@ export default function AvailabilityPage() {
         {state === 'success' && result && (
           <div className="space-y-4">
             <div className="bg-green-100 border border-green-400 text-green-700 rounded-md p-4">
-              <h3 className="font-semibold mb-3">Assessment Complete! 🎉</h3>
+              <h3 className="font-semibold mb-3">Assessment Complete!</h3>
               <div className="space-y-2">
                 <p><strong>Name:</strong> {result.name}</p>                
                 <p className="text-xs text-green-600 mt-2">
-                  Completed at: {new Date(result.completedAt).toLocaleString()}
+                  Completed: {new Date(result.completedAt).toLocaleString()}
                 </p>
                 <p className="text-xs text-green-600">
                   Processing time: {result.processingTime}
