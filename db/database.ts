@@ -17,7 +17,7 @@ interface DatabaseSchema {
   assessments: AssessmentResult[];
 }
 
-class Database {
+export class Database {
   private db: Low<DatabaseSchema> | null = null;
 
   async initialize() {

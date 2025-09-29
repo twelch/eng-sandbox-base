@@ -1,10 +1,23 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { assessUser } from '../app/actions/assessment'
 
+// Mock the database
+vi.mock('../db/database', () => ({
+  database: {
+    addAssessment: vi.fn()
+  }
+}))
+
 // Mock console methods to avoid noise in tests
-beforeEach(() => {
-  vi.spyOn(console, 'log').mockImplementation(() => {})
-  vi.spyOn(console, 'error').mockImplementation(() => {})
+beforeEach(async () => {
+  // Set up the database mock to return a successful response based on input
+  const { database } = await import('../db/database')
+  vi.mocked(database.addAssessment).mockImplementation(async (assessmentData) => {
+    return {
+      id: 'test-id-123',
+      ...assessmentData
+    }
+  })
 })
 
 describe('assessUser', () => {
