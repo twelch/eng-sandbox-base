@@ -22,6 +22,6 @@ npm run dev
 
 * Click the popup to "Open in Browser" and it should load the app.  Start and complete an assessment.
 * Try making edits to  `app/page.tsx`, `app/assessment/page.tsx`, or `app/actions/assessment.ts`. The page auto-updates as you save changes.  
-* Make sure to stop your codespace when you are done.
+* You can stop your codespace back in Github when you are done.
 
 ![alt text](docs/codespace-stop.png)
