@@ -45,7 +45,8 @@ describe('assessUser', () => {
     expect(result.data?.forestlandUnit).toBe('acres')
     expect(result.data?.treeSpecies).toEqual(['Douglas Fir', 'Red Oak'])
     expect(result.data?.completedAt).toBeDefined()
-    expect(result.data?.processingTime).toBe('3 seconds')
+    expect(result.data?.processingTime).toBeGreaterThan(0)
+    expect(typeof result.data?.processingTime).toBe('number')
     expect(result.error).toBeUndefined()
   })
 

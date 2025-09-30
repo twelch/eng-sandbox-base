@@ -13,13 +13,23 @@ type AssessmentResult = {
   forestlandUnit: string;
   treeSpecies: string[];
   completedAt: string;
-  processingTime: string;
+  processingTime: number;
 };
 
 export default function AvailabilityPage() {
   const [state, setState] = useState<AssessmentState>('idle');
   const [result, setResult] = useState<AssessmentResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // Helper function to format processing time from milliseconds
+  const formatProcessingTime = (ms: number): string => {
+    if (ms < 1000) {
+      return `${ms}ms`;
+    } else {
+      const seconds = (ms / 1000).toFixed(1);
+      return `${seconds}s`;
+    }
+  };
 
   const handleSubmit = async (formData: FormData) => {
     // Client-side validation for tree species
@@ -219,7 +229,7 @@ export default function AvailabilityPage() {
                   Completed: {new Date(result.completedAt).toLocaleString()}
                 </p>
                 <p className="text-xs text-green-600">
-                  Processing time: {result.processingTime}
+                  Processing time: {formatProcessingTime(result.processingTime)}
                 </p>
               </div>
             </div>

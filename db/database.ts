@@ -1,4 +1,5 @@
 import { join } from 'path';
+import { randomUUID } from 'crypto';
 import { Low } from 'lowdb';
 import { JSONFile } from 'lowdb/node';
 
@@ -10,7 +11,7 @@ export interface AssessmentResult {
   forestlandUnit: string;
   treeSpecies: string[];
   completedAt: string;
-  processingTime: string;
+  processingTime: number;
 }
 
 interface DatabaseSchema {
@@ -19,12 +20,16 @@ interface DatabaseSchema {
 
 export class Database {
   private db: Low<DatabaseSchema> | null = null;
+  private dbPath: string;
+
+  constructor(dbPath?: string) {
+    this.dbPath = dbPath || join(process.cwd(), 'db', 'db.json');
+  }
 
   async initialize() {
     if (this.db) return this.db;
 
-    const file = join(process.cwd(), 'db', 'db.json');
-    const adapter = new JSONFile<DatabaseSchema>(file);
+    const adapter = new JSONFile<DatabaseSchema>(this.dbPath);
     this.db = new Low<DatabaseSchema>(adapter, { assessments: [] });
 
     await this.db.read();
@@ -43,7 +48,7 @@ export class Database {
     
     const newAssessment: AssessmentResult = {
       ...assessment,
-      id: crypto.randomUUID(),
+      id: randomUUID(),
     };
 
     db.data.assessments.push(newAssessment);

@@ -47,8 +47,14 @@ export async function assessUser(formData: FormData) {
       };
     }
     
+    // Track processing time
+    const startTime = Date.now();
+    
     // Simulate actual processing time (3 seconds)
     await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    const endTime = Date.now();
+    const processingTimeMs = endTime - startTime;
     
     // Generate assessment results
     const assessmentData = {
@@ -58,7 +64,7 @@ export async function assessUser(formData: FormData) {
       forestlandUnit,
       treeSpecies,
       completedAt: new Date().toISOString(),
-      processingTime: "3 seconds"
+      processingTime: processingTimeMs
     };
     
     // Save to database
