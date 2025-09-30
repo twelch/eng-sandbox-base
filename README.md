@@ -11,7 +11,7 @@ This is a starter [Next.js](https://nextjs.org) app containing a simple form and
 
 * It may then ask you to install the Github Codespaces extension
 * Your codespace should now be ready
-* Open a new terminal in VSCode usinv `View -> Terminal` or simply `Ctrl-J`
+* Open a new terminal in VSCode if not already open, using `View -> Terminal` or simply `Ctrl-J`
 * Next, make sure you can install dependencies, run tests, and start a development server
 
 ```bash
@@ -20,7 +20,7 @@ npm test
 npm run dev
 ```
 
-* Now open [http://localhost:3000](http://localhost:3000) and it should load the root page.  Start and complete an assessment.
+* Click the popup to "Open in Browser" and it should load the app.  Start and complete an assessment.
 * Try making edits to  `app/page.tsx`, `app/assessment/page.tsx`, or `app/actions/assessment.ts`. The page auto-updates as you save changes.  
 * Make sure to stop your codespace when you are done.
 
