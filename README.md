@@ -5,9 +5,9 @@ This is a simple [Next.js](https://nextjs.org) app with an assessment form and s
 Make sure you can install dependencies, run tests, run the development server and make edits:
 
 ```bash
-pnpm install
-pnpm test
-pnpm dev
+npm install
+npm test
+npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
