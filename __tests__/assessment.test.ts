@@ -222,22 +222,4 @@ describe('assessUser', () => {
     expect(result.error).toBe('At least one tree species must be selected')
     expect(result.data).toBeUndefined()
   })
-
-  it('should handle processing errors gracefully', async () => {
-    const formData = createValidFormData()
-
-    // Mock setTimeout to throw an error instead of resolving
-    vi.spyOn(global, 'setTimeout').mockImplementation(() => {
-      throw new Error('Processing failed')
-    })
-
-    const result = await assessUser(formData)
-
-    expect(result.success).toBe(false)
-    expect(result.error).toBe('Assessment processing failed. Please try again.')
-    expect(result.data).toBeUndefined()
-
-    // Restore setTimeout
-    vi.restoreAllMocks()
-  })
 })

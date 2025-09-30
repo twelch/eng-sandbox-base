@@ -48,7 +48,7 @@ export async function assessUser(formData: FormData) {
     }
     
     // Simulate actual processing time (3 seconds)
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     
     // Generate assessment results
     const assessmentData = {

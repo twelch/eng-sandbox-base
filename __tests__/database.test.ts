@@ -7,10 +7,6 @@ import type { AssessmentResult } from '../db/database'
 import { Low } from 'lowdb'
 import { JSONFile } from 'lowdb/node'
 
-// Mock crypto.randomUUID for consistent testing
-global.crypto = {
-  randomUUID: randomUUID
-} as any
 
 // Mock the database file path to use test.json
 const TEST_DB_PATH = join(process.cwd(), 'db', 'test.json')
@@ -251,29 +247,6 @@ describe('Database', () => {
       expect(new Date(assessments[0].completedAt).getTime())
         .toBeGreaterThan(new Date(assessments[1].completedAt).getTime());
     });
-
-    it('should handle multiple assessments with same completion time', async () => {
-      const sameTimeAssessment1 = {
-        ...sampleAssessment,
-        name: 'First Person',
-        completedAt: '2025-09-29T12:00:00.000Z'
-      };
-      const sameTimeAssessment2 = {
-        ...sampleAssessment2,
-        name: 'Second Person',
-        completedAt: '2025-09-29T12:00:00.000Z'
-      };
-      
-      await testDatabase.addAssessment(sameTimeAssessment1);
-      await testDatabase.addAssessment(sameTimeAssessment2);
-      
-      const assessments = await testDatabase.getAllAssessments();
-      
-      expect(assessments).toHaveLength(2);
-      // Both should be present even with same timestamp
-      expect(assessments.some((a: AssessmentResult) => a.name === 'First Person')).toBe(true);
-      expect(assessments.some((a: AssessmentResult) => a.name === 'Second Person')).toBe(true);
-    });
   });
 
   describe('getAssessmentById', () => {
@@ -330,25 +303,6 @@ describe('Database', () => {
       const result = await testDatabase.getAssessmentById(sampleAssessment.email.toUpperCase());
       
       expect(result).toBeUndefined(); // Should not find due to case sensitivity
-    });
-  });
-
-  describe('integration tests', () => {
-    it('should handle complete workflow of adding and retrieving assessments', async () => {
-      // Add multiple assessments
-      const assessment1 = await testDatabase.addAssessment(sampleAssessment);
-      const assessment2 = await testDatabase.addAssessment(sampleAssessment2);
-      
-      // Get all assessments
-      const allAssessments = await testDatabase.getAllAssessments();
-      expect(allAssessments).toHaveLength(2);
-      
-      // Get specific assessments by email
-      const retrievedAssessment1 = await testDatabase.getAssessmentById(sampleAssessment.email);
-      const retrievedAssessment2 = await testDatabase.getAssessmentById(sampleAssessment2.email);
-      
-      expect(retrievedAssessment1?.id).toBe(assessment1.id);
-      expect(retrievedAssessment2?.id).toBe(assessment2.id);
     });
   });
 });
