@@ -50,8 +50,11 @@ export async function assessUser(formData: FormData) {
     // Track processing time
     const startTime = Date.now();
     
-    // Simulate actual processing time (3 seconds)
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    //// Perform assessment logic here ////
+    
+    // Simulate actual processing time (between 0.5 and 2 seconds)
+    const randomTimeout = Math.random() * 1500 + 500; // Random between 500-2000ms
+    await new Promise(resolve => setTimeout(resolve, randomTimeout));
     
     const endTime = Date.now();
     const processingTime = endTime - startTime;

@@ -84,7 +84,7 @@ export class Database {
    */
   async getAssessmentById(id: string): Promise<AssessmentResult | undefined> {
     const db = await this.load();
-    return db.data.assessments.find(assessment => assessment.id === id);
+    return db.data.assessments.find(assessment => assessment.email === id);
   }
 }
 
