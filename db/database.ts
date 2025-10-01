@@ -26,7 +26,11 @@ export class Database {
     this.dbPath = dbPath || join(process.cwd(), 'db', 'db.json');
   }
 
-  async initialize() {
+  /**
+   * Loads the database from the JSON file.
+   * @returns The lowdb instance with the database data.
+   */
+  async load() {
     if (this.db) return this.db;
 
     const adapter = new JSONFile<DatabaseSchema>(this.dbPath);
@@ -43,8 +47,13 @@ export class Database {
     return this.db;
   }
 
+  /**
+   * Adds a new assessment to the database.
+   * @param assessment - The assessment data without an ID.
+   * @returns The newly added assessment with a generated ID.
+   */
   async addAssessment(assessment: Omit<AssessmentResult, 'id'>) {
-    const db = await this.initialize();
+    const db = await this.load();
     
     const newAssessment: AssessmentResult = {
       ...assessment,
@@ -57,15 +66,24 @@ export class Database {
     return newAssessment;
   }
 
+  /**
+   * Retrieves all assessments.
+   * @returns An array of all assessment results.
+   */
   async getAllAssessments(): Promise<AssessmentResult[]> {
-    const db = await this.initialize();
+    const db = await this.load();
     return db.data.assessments.sort((a, b) => 
       new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime()
     );
   }
 
+  /**
+   * Retrieves an assessment by its unique ID.
+   * @param id - The unique identifier of the assessment.
+   * @returns The assessment with the matching ID, or undefined if not found.
+   */
   async getAssessmentById(id: string): Promise<AssessmentResult | undefined> {
-    const db = await this.initialize();
+    const db = await this.load();
     return db.data.assessments.find(assessment => assessment.id === id);
   }
 }

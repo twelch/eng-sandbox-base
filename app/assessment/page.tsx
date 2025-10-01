@@ -217,7 +217,7 @@ export default function AvailabilityPage() {
                   </ul>
                 </div>
                 <p className="text-xs text-green-600 mt-2">
-                  Completed: {new Date(result.completedAt).toLocaleString()}
+                  Completed: {new Date(result.completedAt).toISOString().replace('T', ' ').slice(0, 19)} UTC
                 </p>
                 <p className="text-xs text-green-600">
                   Processing time: {result.processingTime}

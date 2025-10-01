@@ -54,7 +54,7 @@ export async function assessUser(formData: FormData) {
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     const endTime = Date.now();
-    const processingTimeMs = endTime - startTime;
+    const processingTime = endTime - startTime;
     
     // Generate assessment results
     const assessmentData = {
@@ -64,7 +64,7 @@ export async function assessUser(formData: FormData) {
       forestlandUnit,
       treeSpecies,
       completedAt: new Date().toISOString(),
-      processingTime: processingTimeMs
+      processingTime
     };
     
     // Save to database

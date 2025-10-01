@@ -56,8 +56,8 @@ export default async function AdminPage() {
                     <p className="text-gray-600">{assessment.email}</p>
                   </div>
                   <div className="text-right text-sm text-gray-500">
-                    <p>Submitted: {new Date(assessment.completedAt).toLocaleDateString()}</p>
-                    <p>Time: {new Date(assessment.completedAt).toLocaleTimeString()}</p>
+                    <p>Submitted: {new Date(assessment.completedAt).toISOString().replace('T', ' ').slice(0, 19)} UTC</p>
+                    <p>Time: {new Date(assessment.completedAt).toISOString().replace('T', ' ').slice(0, 19)} UTC</p>
                   </div>
                 </div>
                 

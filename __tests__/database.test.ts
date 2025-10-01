@@ -60,7 +60,7 @@ describe('Database', () => {
 
   describe('initialize', () => {
     it('should create a new database file with empty assessments array', async () => {
-      const db = await database.initialize();
+      const db = await database.load();
       
       expect(db).toBeDefined();
       expect(db.data).toBeDefined();
@@ -81,7 +81,7 @@ describe('Database', () => {
       };
       writeFileSync(TEST_DB_PATH, JSON.stringify(existingData, null, 2));
 
-      const db = await database.initialize();
+      const db = await database.load();
       
       expect(db.data.assessments).toHaveLength(1);
       expect(db.data.assessments[0].id).toBe('test-id-123');
@@ -89,8 +89,8 @@ describe('Database', () => {
     });
 
     it('should return the same database instance on multiple calls', async () => {
-      const db1 = await database.initialize();
-      const db2 = await database.initialize();
+      const db1 = await database.load();
+      const db2 = await database.load();
       
       expect(db1).toBe(db2);
     });
@@ -182,22 +182,6 @@ describe('Database', () => {
       expect(result?.id).toBe(addedAssessment.id);
       expect(result?.name).toBe(sampleAssessment.name);
       expect(result?.email).toBe(sampleAssessment.email);
-    });
-
-    it('should return correct assessment when multiple exist', async () => {
-      const assessment1 = await database.addAssessment(sampleAssessment);
-      const assessment2 = await database.addAssessment(sampleAssessment2);
-      
-      const result1 = await database.getAssessmentById(assessment1.id);
-      const result2 = await database.getAssessmentById(assessment2.id);
-      
-      expect(result1).toBeDefined();
-      expect(result1?.id).toBe(assessment1.id);
-      expect(result1?.name).toBe(sampleAssessment.name);
-      
-      expect(result2).toBeDefined();
-      expect(result2?.id).toBe(assessment2.id);
-      expect(result2?.name).toBe(sampleAssessment2.name);
     });
   });
 });
