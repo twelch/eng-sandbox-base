@@ -4,16 +4,6 @@ import { database } from '@/db/database';
 export default async function AdminPage() {
   const assessments = await database.getAllAssessments();
 
-  // Helper function to format processing time from milliseconds
-  const formatProcessingTime = (ms: number): string => {
-    if (ms < 1000) {
-      return `${ms}ms`;
-    } else {
-      const seconds = (ms / 1000).toFixed(1);
-      return `${seconds}s`;
-    }
-  };
-
   return (
     <div className="min-h-screen p-8 bg-gray-50">
       <div className="max-w-6xl mx-auto">
@@ -96,7 +86,7 @@ export default async function AdminPage() {
                 
                 <div className="mt-4 pt-4 border-t border-gray-200">
                   <div className="flex justify-between items-center text-sm text-gray-500">
-                    <span>Processing Time: {formatProcessingTime(assessment.processingTime)}</span>
+                    <span>Processing Time: {assessment.processingTime}</span>
                     <span className="font-mono text-xs">ID: {assessment.id}</span>
                   </div>
                 </div>

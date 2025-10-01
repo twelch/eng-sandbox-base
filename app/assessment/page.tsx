@@ -21,16 +21,6 @@ export default function AvailabilityPage() {
   const [result, setResult] = useState<AssessmentResult | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Helper function to format processing time from milliseconds
-  const formatProcessingTime = (ms: number): string => {
-    if (ms < 1000) {
-      return `${ms}ms`;
-    } else {
-      const seconds = (ms / 1000).toFixed(1);
-      return `${seconds}s`;
-    }
-  };
-
   const handleSubmit = async (formData: FormData) => {
     // Client-side validation for tree species
     const selectedSpecies = formData.getAll('treeSpecies');
@@ -54,7 +44,8 @@ export default function AvailabilityPage() {
         setState('error');
       }
     } catch (err) {
-      setError('An unexpected error occurred');
+      const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
+      setError(errorMessage);
       setState('error');
     }
   };
@@ -229,7 +220,7 @@ export default function AvailabilityPage() {
                   Completed: {new Date(result.completedAt).toLocaleString()}
                 </p>
                 <p className="text-xs text-green-600">
-                  Processing time: {formatProcessingTime(result.processingTime)}
+                  Processing time: {result.processingTime}
                 </p>
               </div>
             </div>
