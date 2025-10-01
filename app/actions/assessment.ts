@@ -50,7 +50,7 @@ export async function assessUser(formData: FormData) {
     // Track processing time
     const startTime = Date.now();
     
-    //// Perform assessment logic here ////
+    //// Run assessment here ////
     
     // Simulate actual processing time (between 0.5 and 2 seconds)
     const randomTimeout = Math.random() * 1500 + 500; // Random between 500-2000ms
