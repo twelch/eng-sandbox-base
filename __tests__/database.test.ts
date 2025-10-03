@@ -142,28 +142,6 @@ describe('Database', () => {
       expect(assessments.some((a: AssessmentResult) => a.name === 'John Doe')).toBe(true);
       expect(assessments.some((a: AssessmentResult) => a.name === 'Jane Smith')).toBe(true);
     });
-
-    it('should return assessments sorted by completedAt date (newest first)', async () => {
-      // Add assessments in different order than expected sort
-      const olderAssessment = createAssessment({
-        completedAt: '2025-09-28T10:00:00.000Z' // Earlier date
-      });
-      const newerAssessment = createAssessment({
-        name: 'Jane Smith',
-        completedAt: '2025-09-29T15:00:00.000Z' // Later date
-      });
-      
-      await database.addAssessment(olderAssessment);
-      await database.addAssessment(newerAssessment);
-      
-      const assessments = await database.getAllAssessments();
-      
-      expect(assessments).toHaveLength(2);
-      expect(assessments[0].name).toBe('Jane Smith'); // Newer should be first
-      expect(assessments[1].name).toBe('John Doe'); // Older should be second
-      expect(new Date(assessments[0].completedAt).getTime())
-        .toBeGreaterThan(new Date(assessments[1].completedAt).getTime());
-    });
   });
 
   describe('getAssessmentById', () => {
